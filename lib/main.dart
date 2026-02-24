@@ -3,6 +3,7 @@ import "package:intl/intl.dart";
 import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/screens/home/home.dart";
+import "package:nxcalculator/services/screen_timeout.dart";
 import "package:nxcalculator/theme/dark.dart";
 import "package:nxcalculator/theme/light.dart";
 import "package:provider/provider.dart";
@@ -17,8 +18,25 @@ Future<void> main() async {
   runApp(ChangeNotifierProvider.value(value: settingsRepo, child: const App()));
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> with WidgetsBindingObserver {
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      final settings = context.read<SettingsRepository>();
+      final keepScreenOn = settings.get(keepScreenAwakeSetting);
+      if (keepScreenOn) {
+        await ScreenTimeoutService.setKeepScreenOn(true);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
