@@ -273,7 +273,8 @@ class BinaryNode extends Node {
             r * _toDecimal(Math.log(l.abs().toDouble()) / Math.ln10);
 
         if (l.isInteger == false) {
-          if (digitCountEstimate > Decimal.fromInt(310)) {
+          if (digitCountEstimate > Decimal.fromInt(310) ||
+              digitCountEstimate < Decimal.fromInt(-5500)) {
             throw CalculatorException("Can't calculate");
           }
         }
