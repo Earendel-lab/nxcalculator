@@ -28,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
                   titleSpacing: 0,
                   title: const Text(
                     "Settings",
-                    style: TextStyle(fontFamily: "Ntype-82", fontSize: 36),
+                    style: TextStyle(fontFamily: "NType-82", fontSize: 36),
                     strutStyle: StrutStyle(
                       forceStrutHeight: true,
                       fontSize: 36,

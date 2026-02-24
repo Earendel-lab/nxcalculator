@@ -30,12 +30,15 @@ flutter:
     - assets/icons/dark/
 
   fonts:
-    - family: Ntype-82
+    - family: NType-82
       fonts:
-        - asset: assets/fonts/NType82-Regular.otf
+        - asset: assets/fonts/NType82.otf
+    - family: NDot-77
+      fonts:
+        - asset: assets/fonts/NDot77.otf
     - family: LetteraMono
       fonts:
-        - asset: assets/fonts/LetteraMonoLL-Regular.otf
+        - asset: assets/fonts/LetteraMono.otf
     - family: Inter
       fonts:
-        - asset: assets/fonts/Inter.ttf
+        - asset: assets/fonts/Inter.otf

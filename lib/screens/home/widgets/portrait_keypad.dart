@@ -165,14 +165,14 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
 
   String? _getButtonFont(String buttonKey) {
     if (buttonKey.contains("digit")) {
-      return "Ntype-82";
+      return "NType-82";
     }
 
     switch (buttonKey) {
       case "{clear}":
       case "{delete}":
       case "{decimal}":
-        return "Ntype-82";
+        return "NType-82";
       default:
         return "LetteraMono";
     }
