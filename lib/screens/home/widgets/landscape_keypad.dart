@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:nxcalculator/registries/settings.dart";
@@ -21,6 +23,7 @@ class LandscapeKeypad extends StatefulWidget {
     required this.onClearPress,
     required this.onEqualPress,
     this.isInverted = false,
+    this.fillHorizontalSpace = true,
     this.mode = "",
     super.key,
   });
@@ -37,6 +40,7 @@ class LandscapeKeypad extends StatefulWidget {
   final VoidCallback onEqualPress;
 
   final bool isInverted;
+  final bool fillHorizontalSpace;
   final String mode;
 
   @override
@@ -44,6 +48,8 @@ class LandscapeKeypad extends StatefulWidget {
 }
 
 class _LandscapeKeypadState extends State<LandscapeKeypad> {
+  Timer? _longPressTimer;
+
   Map<String, String> get _keypadValues => {
     "{mode}": widget.mode,
     "{root}": widget.isInverted ? "x" : "√",
@@ -84,6 +90,13 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
   bool get _isDark => Theme.of(context).brightness == Brightness.dark;
 
   @override
+  void dispose() {
+    _longPressTimer?.cancel();
+    _longPressTimer = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<CalculatorRepository>(
       builder: (context, repo, child) {
@@ -91,11 +104,11 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
           shrinkWrap: true,
           itemCount: _keypadValues.length,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 8,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 1.2,
+            childAspectRatio: widget.fillHorizontalSpace ? 2.0 : 1.2,
           ),
           itemBuilder: (context, index) {
             final key = _keypadValues.keys.elementAt(index);
@@ -106,6 +119,22 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
               child: InkWell(
                 customBorder: _getButtonShape(key),
                 onTap: () => _onButtonPress(key),
+                onLongPress: () async {
+                  if (key == "{delete}") {
+                    _longPressTimer = Timer.periodic(
+                      const Duration(milliseconds: 200),
+                      (timer) {
+                        _onButtonPress(key);
+                      },
+                    );
+                  }
+                },
+                onLongPressUp: () {
+                  if (key == "{delete}") {
+                    _longPressTimer?.cancel();
+                    _longPressTimer = null;
+                  }
+                },
                 child: Center(child: _getButtonWidget(key)),
               ),
             );
@@ -241,7 +270,9 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
                           : Image.asset("assets/icons/light/backspace.png"),
                     )
             : Text(
-                _keypadValues[buttonKey] ?? "",
+                buttonKey == "{bracket}" && (font == "NType" || font == "Inter")
+                    ? "(  )"
+                    : _keypadValues[buttonKey] ?? "",
                 style: TextStyle(
                   color: _getButtonFGColor(buttonKey),
                   fontFamily: _getButtonFont(buttonKey),

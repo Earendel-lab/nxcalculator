@@ -8,7 +8,7 @@ import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/screens/home/widgets/equation_input_field.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/screens/home/widgets/dynamic_appbar.dart";
-import "package:nxcalculator/widgets/history_listview.dart";
+import "package:nxcalculator/screens/home/widgets/history_listview.dart";
 import "package:nxcalculator/screens/home/widgets/portrait_keypad.dart";
 import "package:provider/provider.dart";
 
@@ -105,12 +105,14 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                     builder: (context, repo, child) {
                       final text = repo.result == "" && repo.error != ""
                           ? repo.error
-                          : getFormattedResult(
+                          : !repo.isPureNumberExpression
+                          ? getFormattedResult(
                               repo.result,
                               maxIntegerDigits: 13,
                               maxFractionDigits: 13,
                               settings: settings,
-                            );
+                            )
+                          : "";
 
                       return Padding(
                         padding: _getNumpadDensity(),
@@ -311,7 +313,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
           future: _calculator.loadHistory(),
           builder: (context, asyncSnapshot) {
             return HistoryListview(
-              history: _calculator.history,
+              repo: _calculator,
               onTapItem: (item) => Navigator.of(context).pop(item),
               onDelete: (index) async =>
                   await _calculator.removeFromHistory(index),

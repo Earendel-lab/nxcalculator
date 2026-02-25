@@ -94,7 +94,7 @@ String getFormattedResult(
 
     final firstNonZero = raw.split("").indexWhere((char) => char != "0");
 
-    if (firstNonZero > 2) {
+    if (firstNonZero > 6) {
       final significant = raw.substring(firstNonZero);
       final digits = significant.substring(
         0,
