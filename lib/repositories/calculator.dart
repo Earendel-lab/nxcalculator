@@ -245,7 +245,7 @@ class CalculatorRepository with ChangeNotifier {
             insertToken("^2");
           }
         } else {
-          insertToken("sqrt(");
+          insertToken("sqrt");
         }
       default:
     }

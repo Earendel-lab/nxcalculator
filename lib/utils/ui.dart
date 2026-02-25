@@ -34,6 +34,9 @@ InlineSpan getEquationText(
       ),
     );
   }
+  if (text == "sqrt") {
+    return const TextSpan(text: "√");
+  }
 
   return TextSpan(text: getFormattedResult(text, settings: settings));
 }
