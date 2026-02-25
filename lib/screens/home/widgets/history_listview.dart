@@ -1,14 +1,17 @@
 import "package:flutter/material.dart";
 import "package:nxcalculator/models/history_item.dart";
+import "package:nxcalculator/repositories/calculator.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/utils/ui.dart";
+import "package:nxcalculator/widgets/confirm_action_dialog.dart";
 import "package:provider/provider.dart";
 
 class HistoryListview extends StatefulWidget {
   const HistoryListview({
     required this.history,
+    required this.repo,
     this.onDelete,
     this.onTapItem,
     super.key,
@@ -17,6 +20,7 @@ class HistoryListview extends StatefulWidget {
   final List<HistoryItem> history;
   final void Function(int index)? onDelete;
   final void Function(HistoryItem item)? onTapItem;
+  final CalculatorRepository repo;
 
   @override
   State<HistoryListview> createState() => _HistoryListviewState();
@@ -31,9 +35,43 @@ class _HistoryListviewState extends State<HistoryListview> {
       builder: (context, settings, child) {
         return Column(
           children: [
-            const Text(
-              "History",
-              style: TextStyle(fontSize: 24, fontFamily: "NType"),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  const SizedBox.square(dimension: kMinInteractiveDimension),
+                  const Expanded(
+                    child: Text(
+                      "History",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 24, fontFamily: "NType"),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: "Delete History",
+                    onPressed: () async {
+                      final shouldClear = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => const ConfirmActionDialog(
+                          titleText: "Clear History",
+                          infoText:
+                              "Are you sure you want to clear all history?",
+                        ),
+                      );
+
+                      if (shouldClear ?? false) {
+                        await widget.repo.clearHistory();
+                      }
+                    },
+                    icon: SizedBox.square(
+                      dimension: 24,
+                      child: _isDark
+                          ? Image.asset("assets/icons/dark/delete.png")
+                          : Image.asset("assets/icons/light/delete.png"),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 16),
             Expanded(

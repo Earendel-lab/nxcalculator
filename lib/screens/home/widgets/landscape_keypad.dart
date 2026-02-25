@@ -23,6 +23,7 @@ class LandscapeKeypad extends StatefulWidget {
     required this.onClearPress,
     required this.onEqualPress,
     this.isInverted = false,
+    this.fillHorizontalSpace = true,
     this.mode = "",
     super.key,
   });
@@ -39,6 +40,7 @@ class LandscapeKeypad extends StatefulWidget {
   final VoidCallback onEqualPress;
 
   final bool isInverted;
+  final bool fillHorizontalSpace;
   final String mode;
 
   @override
@@ -102,11 +104,11 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
           shrinkWrap: true,
           itemCount: _keypadValues.length,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 8,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 1.2,
+            childAspectRatio: widget.fillHorizontalSpace ? 2.0 : 1.2,
           ),
           itemBuilder: (context, index) {
             final key = _keypadValues.keys.elementAt(index);

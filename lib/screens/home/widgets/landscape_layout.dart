@@ -4,10 +4,12 @@ import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/calculator.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/screens/home/widgets/equation_input_field.dart";
+import "package:nxcalculator/screens/settings/settings.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/screens/home/widgets/dynamic_appbar.dart";
-import "package:nxcalculator/widgets/history_listview.dart";
+import "package:nxcalculator/screens/home/widgets/history_listview.dart";
 import "package:nxcalculator/screens/home/widgets/landscape_keypad.dart";
+import "package:nxcalculator/widgets/slide_page_route.dart";
 import "package:provider/provider.dart";
 
 class LandscapeLayout extends StatefulWidget {
@@ -20,8 +22,12 @@ class LandscapeLayout extends StatefulWidget {
 class _LandscapeLayoutState extends State<LandscapeLayout> {
   final focusNode = FocusNode();
 
+  bool _collapsed = true;
+
   CalculatorRepository get _calculator => context.read<CalculatorRepository>();
   SettingsRepository get _settings => context.read<SettingsRepository>();
+
+  bool get _isDark => Theme.of(context).brightness == Brightness.dark;
 
   @override
   void initState() {
@@ -37,44 +43,94 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
         spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                const DynamicAppbar(),
-                Expanded(
-                  child: FutureBuilder(
-                    future: _calculator.loadHistory(),
-                    builder: (context, asyncSnapshot) {
-                      return Consumer<CalculatorRepository>(
-                        builder: (context, repo, child) {
-                          return HistoryListview(
-                            history: repo.history,
-                            onTapItem: (item) {
-                              repo.clear();
-                              if (item.result.contains("E")) {
-                                if (item.result.startsWith("-")) {
-                                  repo.addOperation("-");
-                                  repo.insertToken(item.result.substring(1));
-                                } else {
-                                  repo.insertToken(item.result);
-                                }
-                              } else {
-                                repo.insertToken(item.result);
-                              }
-                            },
-                            onDelete: (index) async {
-                              await repo.removeFromHistory(index);
-                            },
-                          );
+          _collapsed
+              ? SizedBox(
+                  width: 56,
+                  child: Column(
+                    children: [
+                      IconButton(
+                        tooltip: "Settings",
+                        icon: _isDark
+                            ? Image.asset("assets/icons/dark/settings.png")
+                            : Image.asset("assets/icons/light/settings.png"),
+                        padding: const EdgeInsets.all(14),
+                        onPressed: () {
+                          Navigator.of(
+                            context,
+                          ).push(SlidePageRoute(page: const SettingsScreen()));
                         },
-                      );
-                    },
+                      ),
+                      IconButton(
+                        tooltip: "Toggle Sidebar",
+                        icon: _isDark
+                            ? Image.asset("assets/icons/dark/panel_open.png")
+                            : Image.asset("assets/icons/light/panel_open.png"),
+                        padding: const EdgeInsets.all(14),
+                        onPressed: () {
+                          setState(() => _collapsed = !_collapsed);
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              : Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      DynamicAppbar(
+                        actions: [
+                          IconButton(
+                            tooltip: "Toggle Sidebar",
+                            icon: _isDark
+                                ? Image.asset(
+                                    "assets/icons/dark/panel_close.png",
+                                  )
+                                : Image.asset(
+                                    "assets/icons/light/panel_close.png",
+                                  ),
+                            padding: const EdgeInsets.all(14),
+                            onPressed: () {
+                              setState(() => _collapsed = !_collapsed);
+                            },
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: FutureBuilder(
+                          future: _calculator.loadHistory(),
+                          builder: (context, asyncSnapshot) {
+                            return Consumer<CalculatorRepository>(
+                              builder: (context, repo, child) {
+                                return HistoryListview(
+                                  history: repo.history,
+                                  repo: _calculator,
+                                  onTapItem: (item) {
+                                    repo.clear();
+                                    if (item.result.contains("E")) {
+                                      if (item.result.startsWith("-")) {
+                                        repo.addOperation("-");
+                                        repo.insertToken(
+                                          item.result.substring(1),
+                                        );
+                                      } else {
+                                        repo.insertToken(item.result);
+                                      }
+                                    } else {
+                                      repo.insertToken(item.result);
+                                    }
+                                  },
+                                  onDelete: (index) async {
+                                    await repo.removeFromHistory(index);
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
           Expanded(
             flex: 3,
             child: Padding(
@@ -133,6 +189,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                       return LandscapeKeypad(
                         mode: repo.mode,
                         isInverted: repo.inverted,
+                        fillHorizontalSpace: _collapsed,
                         onDigitPress: (value) {
                           _calculator.addDigit(value);
                           _calculator.evaluate();
