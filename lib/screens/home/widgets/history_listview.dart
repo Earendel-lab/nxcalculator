@@ -45,29 +45,33 @@ class _HistoryListviewState extends State<HistoryListview> {
                       style: TextStyle(fontSize: 24, fontFamily: "NType"),
                     ),
                   ),
-                  IconButton(
-                    tooltip: "Delete History",
-                    onPressed: () async {
-                      final shouldClear = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => const ConfirmActionDialog(
-                          titleText: "Clear History",
-                          infoText:
-                              "Are you sure you want to clear all history?",
-                        ),
-                      );
+                  widget.repo.history.isNotEmpty
+                      ? IconButton(
+                          tooltip: "Delete History",
+                          onPressed: () async {
+                            final shouldClear = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => const ConfirmActionDialog(
+                                titleText: "Clear History",
+                                infoText:
+                                    "Are you sure you want to clear all history?",
+                              ),
+                            );
 
-                      if (shouldClear ?? false) {
-                        await widget.repo.clearHistory();
-                      }
-                    },
-                    icon: SizedBox.square(
-                      dimension: 24,
-                      child: _isDark
-                          ? Image.asset("assets/icons/dark/delete.png")
-                          : Image.asset("assets/icons/light/delete.png"),
-                    ),
-                  ),
+                            if (shouldClear ?? false) {
+                              await widget.repo.clearHistory();
+                            }
+                          },
+                          icon: SizedBox.square(
+                            dimension: 24,
+                            child: _isDark
+                                ? Image.asset("assets/icons/dark/delete.png")
+                                : Image.asset("assets/icons/light/delete.png"),
+                          ),
+                        )
+                      : const SizedBox.square(
+                          dimension: kMinInteractiveDimension,
+                        ),
                 ],
               ),
             ),
