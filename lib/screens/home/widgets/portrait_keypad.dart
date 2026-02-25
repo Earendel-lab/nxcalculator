@@ -161,7 +161,7 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
                     onLongPress: () async {
                       if (key == "{delete}") {
                         _longPressTimer = Timer.periodic(
-                          const Duration(milliseconds: 300),
+                          const Duration(milliseconds: 200),
                           (timer) {
                             _onButtonPress(key);
                           },
