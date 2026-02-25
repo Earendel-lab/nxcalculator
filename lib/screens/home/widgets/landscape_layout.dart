@@ -102,7 +102,6 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                             return Consumer<CalculatorRepository>(
                               builder: (context, repo, child) {
                                 return HistoryListview(
-                                  history: repo.history,
                                   repo: _calculator,
                                   onTapItem: (item) {
                                     repo.clear();

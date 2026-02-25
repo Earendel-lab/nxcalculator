@@ -35,10 +35,7 @@ class ConfirmActionDialog extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                style: _buildActionButtonStyle(
-                  isConfirm: true,
-                  isDark: isDark,
-                ),
+                style: _buildActionButtonStyle(isConfirm: true, isDark: isDark),
                 onPressed: () => Navigator.of(context).pop(true),
                 child: const Text("OK"),
               ),

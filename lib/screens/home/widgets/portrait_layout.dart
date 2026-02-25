@@ -313,7 +313,6 @@ class _PortraitLayoutState extends State<PortraitLayout> {
           future: _calculator.loadHistory(),
           builder: (context, asyncSnapshot) {
             return HistoryListview(
-              history: _calculator.history,
               repo: _calculator,
               onTapItem: (item) => Navigator.of(context).pop(item),
               onDelete: (index) async =>
