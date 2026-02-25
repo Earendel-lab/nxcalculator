@@ -168,7 +168,7 @@ class MathEngine {
     final token = _tokens[index];
 
     if (_isUnaryOperator(token)) {
-      final result = _parsePower(index + 1);
+      final result = _parseFactor(index + 1);
       return ParseResult(
         node: UnaryNode(type: _mapUnary(token), operand: result.node),
         next: result.next,

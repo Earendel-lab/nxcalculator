@@ -25,7 +25,7 @@ enum UnaryNodeType {
 enum BinaryNodeType { DIVISION, MULTIPLICATION, ADDITION, SUBTRACTION, POWER }
 
 abstract class Node {
-  Decimal compute({MathMode mode = MathMode.RADIANS});
+  Decimal compute({required MathMode mode});
   String printAST();
 }
 
@@ -56,8 +56,8 @@ class UnaryNode extends Node {
   UnaryNode({required this.type, required this.operand});
 
   @override
-  Decimal compute({MathMode mode = MathMode.RADIANS}) {
-    final x = operand.compute();
+  Decimal compute({required MathMode mode}) {
+    final x = operand.compute(mode: mode);
     switch (type) {
       case UnaryNodeType.NEGATE:
         return -x;
@@ -94,7 +94,7 @@ class UnaryNode extends Node {
 
           if (exp.isNegative) {
             return (Decimal.one / result).toDecimal(
-              scaleOnInfinitePrecision: 28,
+              scaleOnInfinitePrecision: 128,
             );
           }
           return result;
@@ -248,21 +248,39 @@ class BinaryNode extends Node {
   BinaryNode({required this.type, required this.left, required this.right});
 
   @override
-  Decimal compute({MathMode mode = MathMode.RADIANS}) {
-    final l = left.compute();
-    final r = right.compute();
+  Decimal compute({required MathMode mode}) {
+    final l = left.compute(mode: mode);
+    final r = right.compute(mode: mode);
 
     switch (type) {
       case BinaryNodeType.POWER:
+        if (l == Decimal.zero) {
+          if (r < Decimal.zero) {
+            throw CalculatorException("Division By zero");
+          }
+          return Decimal.zero;
+        }
+
+        if (l < Decimal.zero && r.isInteger == false) {
+          throw CalculatorException("Math Error");
+        }
+
+        if (r == Decimal.zero) {
+          return Decimal.one;
+        }
+
         final digitCountEstimate =
             r * _toDecimal(Math.log(l.abs().toDouble()) / Math.ln10);
 
-        if (digitCountEstimate > Decimal.fromInt(20000)) {
-          throw CalculatorException("Can't calculate");
+        if (l.isInteger == false) {
+          if (digitCountEstimate > Decimal.fromInt(310) ||
+              digitCountEstimate < Decimal.fromInt(-5500)) {
+            throw CalculatorException("Can't calculate");
+          }
         }
 
-        if (l.toDouble() == Math.e) {
-          return _toDecimal(Math.pow(Math.e, r.toDouble()).toDouble());
+        if (digitCountEstimate > Decimal.fromInt(20000)) {
+          throw CalculatorException("Can't calculate");
         }
 
         final exp = r.toBigInt();
@@ -287,9 +305,10 @@ class BinaryNode extends Node {
 
           if (exp.isNegative) {
             return (Decimal.one / result).toDecimal(
-              scaleOnInfinitePrecision: 28,
+              scaleOnInfinitePrecision: 128,
             );
           }
+
           return result;
         }
 
@@ -314,7 +333,7 @@ class BinaryNode extends Node {
         if (r == Decimal.zero) {
           throw CalculatorException("Division By Zero");
         }
-        return (l / r).toDecimal(scaleOnInfinitePrecision: 28);
+        return (l / r).toDecimal(scaleOnInfinitePrecision: 128);
     }
   }
 
@@ -329,12 +348,12 @@ class PercentNode extends Node {
   PercentNode({required this.value, required this.base});
 
   @override
-  Decimal compute({MathMode mode = MathMode.RADIANS}) {
-    final Decimal b = base.compute();
-    final Decimal v = value.compute();
+  Decimal compute({required MathMode mode}) {
+    final Decimal b = base.compute(mode: mode);
+    final Decimal v = value.compute(mode: mode);
 
     return b *
-        (v / Decimal.fromInt(100)).toDecimal(scaleOnInfinitePrecision: 28);
+        (v / Decimal.fromInt(100)).toDecimal(scaleOnInfinitePrecision: 128);
   }
 
   @override

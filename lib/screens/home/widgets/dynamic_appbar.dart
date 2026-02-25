@@ -1,8 +1,12 @@
 import "package:flutter/material.dart";
+import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/calculator.dart";
+import "package:nxcalculator/repositories/settings.dart";
+import "package:nxcalculator/screens/settings/settings.dart";
 import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/utils/ui.dart";
 import "package:nxcalculator/widgets/confirm_action_dialog.dart";
+import "package:nxcalculator/widgets/slide_page_route.dart";
 import "package:provider/provider.dart";
 
 class DynamicAppbar extends StatefulWidget {
@@ -18,24 +22,28 @@ class DynamicAppbar extends StatefulWidget {
 class _DynamicAppbarState extends State<DynamicAppbar> {
   final _menuKey = GlobalKey();
 
-  bool get _isDark =>
-      MediaQuery.of(context).platformBrightness == Brightness.dark;
+  CalculatorRepository get _calculator => context.read<CalculatorRepository>();
 
-  CalculatorRepository get _repo => context.read<CalculatorRepository>();
+  bool get _isDark => Theme.of(context).brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
+    return Consumer<SettingsRepository>(
+      builder: (context, repo, child) {
         return Padding(
           padding: widget.padding ?? EdgeInsetsGeometry.zero,
           child: AppBar(
             titleSpacing: 0,
-            title: const Text(
-              "Calculator",
-              style: TextStyle(fontFamily: "Ntype-82", fontSize: 36),
-              strutStyle: StrutStyle(forceStrutHeight: true, fontSize: 36),
-            ),
+            title: repo.get(hideCalcTextSetting)
+                ? null
+                : const Text(
+                    "Calculator",
+                    style: TextStyle(fontFamily: "NType", fontSize: 36),
+                    strutStyle: StrutStyle(
+                      forceStrutHeight: true,
+                      fontSize: 36,
+                    ),
+                  ),
             actions: [
               ...?widget.actions,
               IconButton(
@@ -72,10 +80,19 @@ class _DynamicAppbarState extends State<DynamicAppbar> {
       color: _isDark ? darkThemeCard : lightThemeCard,
       shape: buildListTileBorder(0, 1),
       position: position,
-      items: const [
-        PopupMenuItem(
+      items: [
+        const PopupMenuItem(
           value: "clear_history",
           child: Text("Clear History", style: TextStyle(fontSize: 18)),
+        ),
+        PopupMenuDivider(
+          indent: 8,
+          endIndent: 8,
+          color: Colors.grey.withAlpha(30),
+        ),
+        const PopupMenuItem(
+          value: "open_settings",
+          child: Text("Settings", style: TextStyle(fontSize: 18)),
         ),
       ],
     );
@@ -92,8 +109,14 @@ class _DynamicAppbarState extends State<DynamicAppbar> {
           );
 
           if (shouldClear ?? false) {
-            await _repo.clearHistory();
+            await _calculator.clearHistory();
           }
+        }
+      case "open_settings":
+        if (mounted) {
+          await Navigator.of(
+            context,
+          ).push(SlidePageRoute(page: const SettingsScreen()));
         }
       default:
     }

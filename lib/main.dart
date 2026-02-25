@@ -1,29 +1,57 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
+import "package:nxcalculator/registries/settings.dart";
+import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/screens/home/home.dart";
+import "package:nxcalculator/services/screen_timeout.dart";
 import "package:nxcalculator/theme/dark.dart";
 import "package:nxcalculator/theme/light.dart";
+import "package:provider/provider.dart";
 
-final rootNavigatorKey = GlobalKey<NavigatorState>();
-
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = Intl.systemLocale;
-  runApp(const App());
+
+  final settingsRepo = SettingsRepository();
+  await settingsRepo.load();
+
+  runApp(ChangeNotifierProvider.value(value: settingsRepo, child: const App()));
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
 
   @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> with WidgetsBindingObserver {
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      final settings = context.read<SettingsRepository>();
+      final keepScreenOn = settings.get(keepScreenAwakeSetting);
+      if (keepScreenOn) {
+        await ScreenTimeoutService.setKeepScreenOn(true);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: rootNavigatorKey,
-      title: "Flutter Demo",
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+    return Consumer<SettingsRepository>(
+      builder: (context, repo, child) {
+        final themeMode = repo.get(themeModeSetting);
+
+        return MaterialApp(
+          title: "NxCalculator",
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeMode,
+          home: const HomeScreen(),
+        );
+      },
     );
   }
 }

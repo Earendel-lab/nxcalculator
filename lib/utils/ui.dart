@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:nxcalculator/models/setting.dart";
+import "package:nxcalculator/registries/settings.dart";
+import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/utils/strings.dart";
 
@@ -6,6 +9,7 @@ InlineSpan getEquationText(
   String text, {
   required double superVerticalOffset,
   TextStyle? superStyle,
+  SettingsRepository? settings,
 }) {
   if (text == "^2") {
     return WidgetSpan(
@@ -20,22 +24,29 @@ InlineSpan getEquationText(
       ),
     );
   }
-  if (text == ".") {
-    return TextSpan(text: getLocaleDecimalSeparator());
+  if (text.contains(".")) {
+    return TextSpan(
+      text: text.replaceAll(
+        ".",
+        mapDecimalSeparator(
+          settings?.get(decimalSeparatorSetting) ?? DecimalSeparator.system,
+        ),
+      ),
+    );
   }
 
-  return TextSpan(text: getFormattedResult(text, noSeparator: true));
+  return TextSpan(text: getFormattedResult(text, settings: settings));
 }
 
-WidgetSpan superscript(String text) {
+WidgetSpan superscript(String text, {String? family, double? fontSize}) {
   return WidgetSpan(
     alignment: PlaceholderAlignment.top,
     child: Transform.translate(
-      offset: const Offset(0, -6),
+      offset: const Offset(0, -5),
       child: Text(
         text,
-        textScaler: const TextScaler.linear(0.7),
-        style: const TextStyle(fontSize: 20),
+        textScaler: const TextScaler.linear(0.8),
+        style: TextStyle(fontSize: fontSize, fontFamily: family),
       ),
     ),
   );

@@ -58,6 +58,10 @@ class CalculatorRepository with ChangeNotifier {
   bool _isPureNumberExpression() {
     var hasDecimal = false;
 
+    if (equation.length == 1 && _isConstant(equation[0])) {
+      return true;
+    }
+
     for (final token in equation) {
       if (_isNumber(token)) {
         continue;
@@ -361,26 +365,25 @@ class CalculatorRepository with ChangeNotifier {
    * Local Storage Functions
    */
 
-  Future<bool> saveHistory(HistoryItem item, {bool checkLast = true}) async {
-    if (checkLast) {
+  Future<bool> saveHistory(
+    HistoryItem item, {
+    bool preventDuplicate = false,
+  }) async {
+    if (!_isNumber(result)) {
+      return false;
+    }
+
+    if (_isPureNumberExpression()) {
+      return false;
+    }
+
+    if (preventDuplicate) {
       if (history.isNotEmpty && history.first.equals(item)) {
         return false;
       }
-
-      if (!_isNumber(result)) {
-        return false;
-      }
-
-      if (_isPureNumberExpression()) {
-        return false;
-      }
-
-      if (equation.length == 1 && _isConstant(equation[0])) {
-        return false;
-      }
-
-      history.insert(0, item);
     }
+
+    history.insert(0, item);
 
     if (history.length > _maxHistoryItems) {
       history.removeRange(_maxHistoryItems, history.length);
