@@ -168,6 +168,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  nxdesign:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "16a85858b7c03a09a18239fabeaac4e4c4dc7c9c"
+      url: "https://github.com/montybytes/nxdesign.git"
+    source: git
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -374,5 +383,5 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.10.1 <4.0.0"
   flutter: ">=3.35.0"

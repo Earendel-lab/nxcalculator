@@ -3,6 +3,7 @@ import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/screens/settings/settings.dart";
 import "package:nxcalculator/widgets/slide_page_route.dart";
+import "package:nxdesign/fonts.dart";
 import "package:provider/provider.dart";
 
 class DynamicAppbar extends StatelessWidget {
@@ -25,7 +26,10 @@ class DynamicAppbar extends StatelessWidget {
                 ? null
                 : const Text(
                     "Calculator",
-                    style: TextStyle(fontFamily: "NType", fontSize: 36),
+                    style: TextStyle(
+                      fontFamily: NxFonts.fontNType,
+                      fontSize: 36,
+                    ),
                     strutStyle: StrutStyle(
                       forceStrutHeight: true,
                       fontSize: 36,

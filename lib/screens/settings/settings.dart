@@ -1,12 +1,12 @@
-import "package:flutter/material.dart";
+import "package:flutter/material.dart" hide Switch, Checkbox;
 import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/screens/settings/widgets/multi_selectable_setting_tile.dart";
-import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/utils/ui.dart";
-import "package:nxcalculator/widgets/custom_checkbox.dart";
-import "package:nxcalculator/widgets/custom_switch.dart";
+import "package:nxdesign/colors.dart";
+import "package:nxdesign/fonts.dart";
+import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class SettingsScreen extends StatelessWidget {
@@ -29,7 +29,10 @@ class SettingsScreen extends StatelessWidget {
                   titleSpacing: 0,
                   title: const Text(
                     "Settings",
-                    style: TextStyle(fontFamily: "NType", fontSize: 36),
+                    style: TextStyle(
+                      fontFamily: NxFonts.fontNType,
+                      fontSize: 36,
+                    ),
                     strutStyle: StrutStyle(
                       forceStrutHeight: true,
                       fontSize: 36,
@@ -72,9 +75,11 @@ class SettingsScreen extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final setting = entry.value[index];
                                   final value = repo.get(setting);
-                                  final shape = buildListTileBorder(
-                                    index,
-                                    entry.value.length,
+                                  final shape = RoundedRectangleBorder(
+                                    borderRadius: getListTileBorder(
+                                      index,
+                                      entry.value.length,
+                                    ),
                                   );
 
                                   if (value is ThemeMode) {
@@ -117,16 +122,17 @@ class SettingsScreen extends StatelessWidget {
                               ),
                               if (entry.key == "formatting" &&
                                   repo.hasSameSeparators)
-                                SliverToBoxAdapter(
+                                const SliverToBoxAdapter(
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 16),
+                                    padding: EdgeInsets.only(top: 16),
                                     child: ListTile(
                                       dense: true,
-                                      shape: buildListTileBorder(0, 1),
-                                      tileColor: nothingRed,
-                                      title: const Text(
+                                      tileColor: NxColors.nothingRed,
+                                      title: Text(
                                         "Grouping and decimal separators have the same value. Output will be confusing to read!",
-                                        style: TextStyle(color: darkThemeText),
+                                        style: TextStyle(
+                                          color: NxColors.darkThemeText,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -163,7 +169,7 @@ class SettingsScreen extends StatelessWidget {
         subtitle: setting.description != null
             ? Text(setting.description!)
             : null,
-        trailing: CustomSwitch(
+        trailing: Switch(
           value: value,
           onChanged: (value) => settings.set(setting, value),
         ),
@@ -199,16 +205,22 @@ class SettingsScreen extends StatelessWidget {
                   ? Image.asset("assets/icons/dark/$iconName.png")
                   : Image.asset("assets/icons/light/$iconName.png"),
             ),
-            children: ["Inter", "LetteraMono", "NDot", "NType"].map((font) {
-              return ListTile(
-                title: Text(font, style: TextStyle(fontFamily: font)),
-                trailing: CustomCheckbox(
-                  value: value == font,
-                  onChanged: (value) => settings.set(setting, font),
-                ),
-                onTap: () => settings.set(setting, font),
-              );
-            }).toList(),
+            children:
+                [
+                  NxFonts.fontInter,
+                  NxFonts.fontLetteraMono,
+                  NxFonts.fontNDot,
+                  NxFonts.fontNType,
+                ].map((font) {
+                  return ListTile(
+                    title: Text(font, style: TextStyle(fontFamily: font)),
+                    trailing: Checkbox(
+                      value: value == font,
+                      onChanged: (value) => settings.set(setting, font),
+                    ),
+                    onTap: () => settings.set(setting, font),
+                  );
+                }).toList(),
           ),
         );
       },

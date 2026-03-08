@@ -5,9 +5,10 @@ import "package:flutter/services.dart";
 import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/settings.dart";
-import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/utils/ui.dart";
+import "package:nxdesign/colors.dart";
+import "package:nxdesign/fonts.dart";
 import "package:provider/provider.dart";
 
 class PortraitKeypad extends StatefulWidget {
@@ -130,7 +131,9 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
 
                   return Material(
                     shape: _getButtonShape(key),
-                    color: _isDark ? darkThemeCard : lightThemeCard,
+                    color: _isDark
+                        ? NxColors.darkThemeCard
+                        : NxColors.lightThemeCard,
                     child: InkWell(
                       customBorder: _getButtonShape(key),
                       onTap: () => _onButtonPress(key),
@@ -198,15 +201,16 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
     }
 
     return switch (buttonKey) {
-      "{divide}" when font == "NType" => "LetteraMono",
-      "{multiply}" when font == "NType" => "LetteraMono",
-      "{subtract}" when font == "NType" => "LetteraMono",
-      "{add}" when font == "NType" => "LetteraMono",
-      "{equals}" when font == "NType" => "LetteraMono",
-      "{pi}" when font == "NType" => "LetteraMono",
-      "{power}" when font == "NType" => "LetteraMono",
-      "{root}" when font == "NType" && !widget.isInverted => "LetteraMono",
-      "{factorial}" when font == "NType" => "LetteraMono",
+      "{divide}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{multiply}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{subtract}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{add}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{equals}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{pi}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{power}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
+      "{root}" when font == NxFonts.fontNType && !widget.isInverted =>
+        NxFonts.fontLetteraMono,
+      "{factorial}" when font == NxFonts.fontNType => NxFonts.fontLetteraMono,
       _ => font,
     };
   }
@@ -215,21 +219,21 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
     switch (buttonKey) {
       case "{clear}":
       case "{equals}":
-        return nothingRed;
+        return NxColors.nothingRed;
       case "{divide}":
       case "{multiply}":
       case "{subtract}":
       case "{add}":
-        return _isDark ? lightThemeCard : darkThemeCard;
+        return _isDark ? NxColors.lightThemeCard : NxColors.darkThemeCard;
       default:
-        return _isDark ? darkThemeCard : lightThemeCard;
+        return _isDark ? NxColors.darkThemeCard : NxColors.lightThemeCard;
     }
   }
 
   ShapeBorder? _getButtonShape(String buttonKey) {
     final shape = _settings.get(numpadButtonShapeSetting);
     final selectedBorderSide = buttonKey == "{invert}" && widget.isInverted
-        ? const BorderSide(color: nothingRed, width: 2)
+        ? const BorderSide(color: NxColors.nothingRed, width: 2)
         : BorderSide.none;
 
     if (shape == NumpadShape.circular) {
@@ -266,12 +270,12 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
     switch (buttonKey) {
       case "{clear}":
       case "{equals}":
-        return darkThemeText;
+        return NxColors.darkThemeText;
       case "{divide}":
       case "{multiply}":
       case "{subtract}":
       case "{add}":
-        return _isDark ? lightThemeText : darkThemeText;
+        return _isDark ? NxColors.lightThemeText : NxColors.darkThemeText;
       default:
         return null;
     }
@@ -309,7 +313,7 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
                 buttonKey == "{delete}"
             ? SizedBox.square(
                 dimension: 48,
-                child: font == "NDot"
+                child: font == NxFonts.fontNDot
                     ? Text(
                         "<<",
                         style: TextStyle(
@@ -329,7 +333,8 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
                     : Image.asset("assets/icons/light/backspace.png"),
               )
             : Text(
-                buttonKey == "{bracket}" && (font == "NType" || font == "Inter")
+                buttonKey == "{bracket}" &&
+                        (font == NxFonts.fontNType || font == NxFonts.fontInter)
                     ? "(  )"
                     : _basicKeypadValues[buttonKey] ?? "",
                 style: TextStyle(
@@ -350,9 +355,9 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
     final font = _getButtonFont(buttonKey);
 
     final style = TextStyle(
-      fontSize: font == "LetteraMono" ? 20 : 24,
+      fontSize: font == NxFonts.fontLetteraMono ? 20 : 24,
       fontFamily: font,
-      color: _isDark ? darkThemeText : lightThemeText,
+      color: _isDark ? NxColors.darkThemeText : NxColors.lightThemeText,
     );
 
     final superText = switch (buttonKey) {

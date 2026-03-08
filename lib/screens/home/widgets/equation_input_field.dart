@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/utils/ui.dart";
+import "package:nxdesign/fonts.dart";
 import "package:provider/provider.dart";
 
 class EquationInputField extends StatelessWidget {
@@ -139,7 +140,7 @@ class EquationInputField extends StatelessWidget {
       textAlign: TextAlign.end,
       style: styleOverride.copyWith(
         fontFamily: font,
-        letterSpacing: font == "LetteraMono" ? -6 : null,
+        letterSpacing: font == NxFonts.fontLetteraMono ? -6 : null,
       ),
       onSelectionChanged: (selection, cause) {
         if (cause == SelectionChangedCause.drag ||

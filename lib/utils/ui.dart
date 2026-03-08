@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/settings.dart";
-import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/utils/strings.dart";
+import "package:nxdesign/metrics.dart";
 
 InlineSpan getEquationText(
   String text, {
@@ -58,17 +58,16 @@ WidgetSpan superscript(String text, {String? family, double? fontSize}) {
   );
 }
 
-RoundedRectangleBorder buildListTileBorder(int index, int listLength) {
-  if (listLength == 0) {
-    return defaultBorderRadius;
-  }
+BorderRadius getListTileBorder(int index, int listLength) {
   if (listLength == 1) {
-    return largeBorderRadius;
-  } else if (index == 0) {
-    return startBorderRadius;
-  } else if (index == listLength - 1) {
-    return endBorderRadius;
+    return NxMetrics.largeBorderRadius;
   }
-
-  return defaultBorderRadius;
+  if (index == 0) {
+    return NxMetrics.startBorderRadius;
+  }
+  if (index == listLength - 1) {
+    return NxMetrics.endBorderRadius;
+  }
+  return NxMetrics.defaultBorderRadius;
 }
+

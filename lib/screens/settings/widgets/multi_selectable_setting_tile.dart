@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:nxcalculator/repositories/settings.dart";
-import "package:nxcalculator/theme/constants.dart";
+import "package:nxdesign/metrics.dart";
 import "package:provider/provider.dart";
 
 class MultiSettingTile<T> extends StatelessWidget {
@@ -21,7 +21,7 @@ class MultiSettingTile<T> extends StatelessWidget {
       builder: (context, settings, child) {
         return DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: largeBorderRadius.borderRadius,
+            borderRadius: NxMetrics.largeBorderRadius,
             border: Border.all(color: Colors.grey.withAlpha(80)),
           ),
           child: Row(

@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/services/screen_timeout.dart";
+import "package:nxdesign/fonts.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 final allSettings = <Setting>[
@@ -154,7 +155,7 @@ final equationResultFontSetting = Setting<String>(
   category: "fonts",
   name: "Equation & Result Font",
   read: (prefs) async {
-    return await prefs.getString("equation_result_font") ?? "Inter";
+    return await prefs.getString("equation_result_font") ?? NxFonts.fontInter;
   },
   write: (prefs, value) async {
     await _writeToStorageHelper(prefs, "equation_result_font", value);
@@ -166,7 +167,7 @@ final numpadFontSetting = Setting<String>(
   category: "fonts",
   name: "Numpad Font",
   read: (prefs) async {
-    return await prefs.getString("numpad_font") ?? "NType";
+    return await prefs.getString("numpad_font") ?? NxFonts.fontNType;
   },
   write: (prefs, value) async {
     await _writeToStorageHelper(prefs, "numpad_font", value);

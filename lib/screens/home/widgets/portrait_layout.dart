@@ -4,12 +4,13 @@ import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/calculator.dart";
 import "package:nxcalculator/repositories/settings.dart";
-import "package:nxcalculator/theme/constants.dart";
 import "package:nxcalculator/screens/home/widgets/equation_input_field.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/screens/home/widgets/dynamic_appbar.dart";
 import "package:nxcalculator/screens/home/widgets/history_listview.dart";
 import "package:nxcalculator/screens/home/widgets/portrait_keypad.dart";
+import "package:nxdesign/colors.dart";
+import "package:nxdesign/fonts.dart";
 import "package:provider/provider.dart";
 
 class PortraitLayout extends StatefulWidget {
@@ -60,7 +61,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                     icon: Container(
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: _isExtended ? nothingRed : null,
+                        color: _isExtended ? NxColors.nothingRed : null,
                         shape: BoxShape.circle,
                       ),
                       child: _isDark
@@ -131,7 +132,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                             ),
                             letterSpacing:
                                 _settings.get(equationResultFontSetting) ==
-                                    "LetteraMono"
+                                    NxFonts.fontLetteraMono
                                 ? -7
                                 : null,
                           ),
@@ -152,7 +153,9 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                                   icon: Container(
                                     padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
-                                      color: _isExtended ? nothingRed : null,
+                                      color: _isExtended
+                                          ? NxColors.nothingRed
+                                          : null,
                                       shape: BoxShape.circle,
                                     ),
                                     child: _isDark

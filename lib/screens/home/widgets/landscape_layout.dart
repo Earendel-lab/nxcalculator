@@ -10,6 +10,7 @@ import "package:nxcalculator/screens/home/widgets/dynamic_appbar.dart";
 import "package:nxcalculator/screens/home/widgets/history_listview.dart";
 import "package:nxcalculator/screens/home/widgets/landscape_keypad.dart";
 import "package:nxcalculator/widgets/slide_page_route.dart";
+import "package:nxdesign/fonts.dart";
 import "package:provider/provider.dart";
 
 class LandscapeLayout extends StatefulWidget {
@@ -176,7 +177,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                           fontFamily: _settings.get(equationResultFontSetting),
                           letterSpacing:
                               _settings.get(equationResultFontSetting) ==
-                                  "LetteraMono"
+                                  NxFonts.fontLetteraMono
                               ? -6
                               : null,
                         ),
