@@ -100,7 +100,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                       );
                     },
                   ),
-                  const SizedBox(height: 24),
+                  const Flexible(child: SizedBox(height: 24)),
                   Consumer<CalculatorRepository>(
                     builder: (context, repo, child) {
                       final text = repo.result == "" && repo.error != ""
@@ -192,9 +192,9 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                           ),
                         )
                       : const SizedBox(height: 56),
-                  const SizedBox(height: 8),
+                  const Flexible(child: SizedBox(height: 8)),
                   Padding(
-                    padding: _getNumpadDensity(),
+                    padding: _getNumpadDensity().copyWith(bottom: 12),
                     child: Consumer<CalculatorRepository>(
                       builder: (context, repo, child) {
                         return GestureDetector(
@@ -293,7 +293,6 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
