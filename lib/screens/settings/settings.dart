@@ -1,7 +1,6 @@
 import "package:flutter/material.dart" hide Switch, Checkbox;
 import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/repositories/settings.dart";
-import "package:nxcalculator/screens/settings/widgets/multi_selectable_setting_tile.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxcalculator/utils/ui.dart";
 import "package:nxdesign/colors.dart";
@@ -239,12 +238,12 @@ class SettingsScreen extends StatelessWidget {
         title: Text(setting.name, style: const TextStyle(fontSize: 18)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 8),
-          child: MultiSettingTile<ThemeMode>(
+          child: MultiSetting<ThemeMode>(
             selected: themeMode,
             selectables: const [
-              MultiSetting(label: "System", data: ThemeMode.system),
-              MultiSetting(label: "Light", data: ThemeMode.light),
-              MultiSetting(label: "Dark", data: ThemeMode.dark),
+              MultiSettingData(label: "System", data: ThemeMode.system),
+              MultiSettingData(label: "Light", data: ThemeMode.light),
+              MultiSettingData(label: "Dark", data: ThemeMode.dark),
             ],
             onSelectionChanged: (selection) {
               settings.set(setting, selection);
@@ -261,32 +260,32 @@ class SettingsScreen extends StatelessWidget {
     dynamic typedValue, {
     ShapeBorder? shape,
   }) {
-    final List<MultiSetting> selectables = switch (setting.key) {
+    final List<MultiSettingData> selectables = switch (setting.key) {
       "grouping_separator" => const [
-        MultiSetting(data: GroupingSeparator.system, label: "System"),
-        MultiSetting(data: GroupingSeparator.comma, label: "Comma"),
-        MultiSetting(data: GroupingSeparator.dot, label: "Dot"),
-        MultiSetting(data: GroupingSeparator.space, label: "Space"),
+        MultiSettingData(data: GroupingSeparator.system, label: "System"),
+        MultiSettingData(data: GroupingSeparator.comma, label: "Comma"),
+        MultiSettingData(data: GroupingSeparator.dot, label: "Dot"),
+        MultiSettingData(data: GroupingSeparator.space, label: "Space"),
       ],
       "decimal_separator" => const [
-        MultiSetting(data: DecimalSeparator.system, label: "System"),
-        MultiSetting(data: DecimalSeparator.comma, label: "Comma"),
-        MultiSetting(data: DecimalSeparator.dot, label: "Dot"),
+        MultiSettingData(data: DecimalSeparator.system, label: "System"),
+        MultiSettingData(data: DecimalSeparator.comma, label: "Comma"),
+        MultiSettingData(data: DecimalSeparator.dot, label: "Dot"),
       ],
       "button_shape" => const [
-        MultiSetting(data: NumpadShape.circular, label: "Circle"),
-        MultiSetting(data: NumpadShape.rounded, label: "Rounded"),
-        MultiSetting(data: NumpadShape.mixed, label: "Mixed"),
+        MultiSettingData(data: NumpadShape.circular, label: "Circle"),
+        MultiSettingData(data: NumpadShape.rounded, label: "Rounded"),
+        MultiSettingData(data: NumpadShape.mixed, label: "Mixed"),
       ],
       "numpad_density" => const [
-        MultiSetting(data: NumpadDensity.comfy, label: "Comfy"),
-        MultiSetting(data: NumpadDensity.normal, label: "Normal"),
-        MultiSetting(data: NumpadDensity.dense, label: "Dense"),
+        MultiSettingData(data: NumpadDensity.comfy, label: "Comfy"),
+        MultiSettingData(data: NumpadDensity.normal, label: "Normal"),
+        MultiSettingData(data: NumpadDensity.dense, label: "Dense"),
       ],
       "theme_mode" => const [
-        MultiSetting(data: ThemeMode.system, label: "System"),
-        MultiSetting(data: ThemeMode.light, label: "Light"),
-        MultiSetting(data: ThemeMode.dark, label: "Dark"),
+        MultiSettingData(data: ThemeMode.system, label: "System"),
+        MultiSettingData(data: ThemeMode.light, label: "Light"),
+        MultiSettingData(data: ThemeMode.dark, label: "Dark"),
       ],
       _ => [],
     };
@@ -297,7 +296,7 @@ class SettingsScreen extends StatelessWidget {
         title: Text(setting.name, style: const TextStyle(fontSize: 18)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 8),
-          child: MultiSettingTile(
+          child: MultiSetting(
             selected: typedValue,
             selectables: selectables,
             onSelectionChanged: (selection) {

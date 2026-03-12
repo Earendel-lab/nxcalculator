@@ -23,7 +23,7 @@ class LandscapeLayout extends StatefulWidget {
 class _LandscapeLayoutState extends State<LandscapeLayout> {
   final focusNode = FocusNode();
 
-  bool _collapsed = true;
+  var _collapsed = true;
 
   CalculatorRepository get _calculator => context.read<CalculatorRepository>();
   SettingsRepository get _settings => context.read<SettingsRepository>();
