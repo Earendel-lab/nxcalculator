@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/calculator.dart";
 import "package:nxcalculator/repositories/settings.dart";
+import "package:nxcalculator/utils/strings.dart";
 import "package:nxdesign/colors.dart";
 import "package:nxdesign/fonts.dart";
 import "package:provider/provider.dart";
@@ -34,15 +35,14 @@ class _EquationInputFieldState extends State<EquationInputField> {
   late final TextEditingController _textController;
   late final ScrollController _scrollController;
 
-  late final _baseStyle = DefaultTextStyle.of(context).style;
-
   CalculatorRepository get calculator => context.read<CalculatorRepository>();
+  SettingsRepository get settings => context.read<SettingsRepository>();
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode()..requestFocus();
-    _textController = TextEditingController(text: widget.equation.join());
+    _textController = TextEditingController(text: _getFormattedEquation());
     _scrollController = ScrollController();
   }
 
@@ -50,7 +50,7 @@ class _EquationInputFieldState extends State<EquationInputField> {
   void didUpdateWidget(covariant EquationInputField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    final currentEquation = widget.equation.join();
+    final currentEquation = _getFormattedEquation();
     final cursorOffset = widget.equation
         .take(widget.cursor)
         .fold(0, (sum, token) => sum + token.length);
@@ -86,13 +86,10 @@ class _EquationInputFieldState extends State<EquationInputField> {
         return LayoutBuilder(
           builder: (context, constraints) {
             final maxWidth = constraints.maxWidth;
+            final displayText = _getFormattedEquation();
             final chosenSize = maxWidth.isInfinite || maxWidth <= 0
                 ? widget.minFontSize
-                : _findFontSizeThatFits(
-                    widget.equation.join(),
-                    maxWidth,
-                    _baseStyle,
-                  );
+                : _findFontSizeThatFits(displayText, maxWidth);
             final fontSize = chosenSize > widget.minFontSize
                 ? chosenSize
                 : widget.minFontSize;
@@ -121,7 +118,7 @@ class _EquationInputFieldState extends State<EquationInputField> {
                 keyboardType: TextInputType.none,
                 selectionControls: CalculatorSelectionControls(),
                 scrollPhysics: const NeverScrollableScrollPhysics(),
-                style: _baseStyle.copyWith(
+                style: DefaultTextStyle.of(context).style.copyWith(
                   height: 1,
                   fontFamily: font,
                   fontSize: fontSize,
@@ -182,14 +179,15 @@ class _EquationInputFieldState extends State<EquationInputField> {
     );
   }
 
-  double _findFontSizeThatFits(
-    String text,
-    double maxWidth,
-    TextStyle baseStyle,
-  ) {
-    double measureWidth(String text, TextStyle textStyle) {
+  double _findFontSizeThatFits(String text, double maxWidth) {
+    final font = settings.get(equationResultFontSetting);
+
+    double measureWidth(String text, double fontSize) {
       final tp = TextPainter(
-        text: TextSpan(text: text, style: textStyle),
+        text: TextSpan(
+          text: text,
+          style: TextStyle(fontFamily: font, fontSize: fontSize),
+        ),
         textDirection: TextDirection.ltr,
         maxLines: 1,
       );
@@ -197,8 +195,7 @@ class _EquationInputFieldState extends State<EquationInputField> {
       return tp.width;
     }
 
-    if (measureWidth(text, baseStyle.copyWith(fontSize: widget.maxFontSize)) <=
-        maxWidth) {
+    if (measureWidth(text, widget.maxFontSize) <= maxWidth) {
       return widget.maxFontSize;
     }
 
@@ -208,7 +205,7 @@ class _EquationInputFieldState extends State<EquationInputField> {
 
     for (var i = 0; i < 20; i++) {
       final mid = (low + high) / 2;
-      final width = measureWidth(text, baseStyle.copyWith(fontSize: mid));
+      final width = measureWidth(text, mid);
       if (width <= maxWidth) {
         best = mid;
         low = mid;
@@ -224,6 +221,12 @@ class _EquationInputFieldState extends State<EquationInputField> {
       best = widget.minFontSize;
     }
     return best;
+  }
+
+  String _getFormattedEquation() {
+    return widget.equation.map((token) {
+      return getFormattedToken(token, noGrouping: true, settings: settings);
+    }).join();
   }
 }
 

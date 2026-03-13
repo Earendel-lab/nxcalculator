@@ -92,18 +92,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                                   repo: _calculator,
                                   onTapItem: (item) {
                                     repo.clear();
-                                    if (item.result.contains("E")) {
-                                      if (item.result.startsWith("-")) {
-                                        repo.addOperation("-");
-                                        repo.insertToken(
-                                          item.result.substring(1),
-                                        );
-                                      } else {
-                                        repo.insertToken(item.result);
-                                      }
-                                    } else {
-                                      repo.insertToken(item.result);
-                                    }
+                                    repo.insertToken(item.result);
                                   },
                                   onDelete: (index) async {
                                     await repo.removeFromHistory(index);
@@ -144,7 +133,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                       final text = repo.result == "" && repo.error != ""
                           ? repo.error
                           : !repo.isPureNumberExpression
-                          ? getFormattedResult(
+                          ? getFormattedToken(
                               repo.result,
                               maxIntegerDigits: 18,
                               maxFractionDigits: 18,

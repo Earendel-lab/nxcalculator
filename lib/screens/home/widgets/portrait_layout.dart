@@ -99,7 +99,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                       final text = repo.result == "" && repo.error != ""
                           ? repo.error
                           : !repo.isPureNumberExpression
-                          ? getFormattedResult(
+                          ? getFormattedToken(
                               repo.result,
                               maxIntegerDigits: 13,
                               maxFractionDigits: 13,
@@ -312,16 +312,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
 
     if (item != null) {
       _calculator.clear();
-      if (item.result.contains("E")) {
-        if (item.result.startsWith("-")) {
-          _calculator.addOperation("-");
-          _calculator.insertToken(item.result.substring(1));
-        } else {
-          _calculator.insertToken(item.result);
-        }
-      } else {
-        _calculator.insertToken(item.result);
-      }
+      _calculator.insertToken(item.result);
     }
   }
 

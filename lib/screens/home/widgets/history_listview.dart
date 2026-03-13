@@ -1,9 +1,9 @@
 import "package:flutter/material.dart" hide Dismissible;
 import "package:nxcalculator/models/history_item.dart";
+import "package:nxcalculator/registries/settings.dart";
 import "package:nxcalculator/repositories/calculator.dart";
 import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/utils/strings.dart";
-import "package:nxcalculator/utils/ui.dart";
 import "package:nxdesign/colors.dart";
 import "package:nxdesign/fonts.dart";
 import "package:nxdesign/metrics.dart";
@@ -102,22 +102,29 @@ class _HistoryListviewState extends State<HistoryListview> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  getFormattedResult(
+                  getFormattedToken(
                     widget.repo.history[index].result,
                     settings: _settings,
                   ),
                   maxLines: 1,
                   textAlign: TextAlign.end,
-                  style: const TextStyle(fontSize: 28),
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontFamily: _settings.get(equationResultFontSetting),
+                  ),
                   strutStyle: const StrutStyle(
                     forceStrutHeight: true,
                     fontSize: 28,
                   ),
                 ),
-                Text.rich(
+                Text(
+                  widget.repo.history[index].equation.map((token) {
+                    return getFormattedToken(token, settings: _settings);
+                  }).join(),
                   maxLines: 1,
                   textAlign: TextAlign.end,
                   style: TextStyle(
+                    fontFamily: _settings.get(equationResultFontSetting),
                     fontSize: 20,
                     color: _isDark
                         ? NxColors.darkInactive
@@ -126,19 +133,6 @@ class _HistoryListviewState extends State<HistoryListview> {
                   strutStyle: const StrutStyle(
                     forceStrutHeight: true,
                     fontSize: 20,
-                  ),
-                  TextSpan(
-                    children: widget.repo.history[index].equation.map((token) {
-                      return getEquationText(
-                        token,
-                        superVerticalOffset: -4,
-                        superStyle: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                        settings: _settings,
-                      );
-                    }).toList(),
                   ),
                 ),
               ],

@@ -81,8 +81,9 @@ class CalculatorRepository with ChangeNotifier {
   void insertToken(String token) {
     if (token.startsWith("-") && token.length > 1) {
       equation.insert(cursor, "-");
+      cursor += 1;
       equation.insert(cursor, token.substring(1));
-      cursor += 2;
+      cursor += 1;
     } else {
       equation.insert(cursor, token);
       cursor++;

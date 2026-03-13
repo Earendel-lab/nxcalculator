@@ -31,8 +31,8 @@ void main() {
       final difference = engine.parse(["10", "-", "2"]);
       expect(engine.evaluate(difference), Decimal.parse("8.0"));
 
-      final multiple = engine.parse(["10", "*", "2"]);
-      expect(engine.evaluate(multiple), Decimal.parse("20.0"));
+      final multiple = engine.parse(["10", "*", "2", "/", "2"]);
+      expect(engine.evaluate(multiple), Decimal.parse("10.0"));
 
       final division = engine.parse(["10", "/", "2"]);
       expect(engine.evaluate(division), Decimal.parse("5.0"));
