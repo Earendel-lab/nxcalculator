@@ -22,7 +22,13 @@ class MathEngine {
     _tokens = expression;
     _tokens.addAll(List.filled(unclosedBrackets, ")"));
 
-    return _parseExpression(0).node;
+    final result = _parseExpression(0);
+
+    if (result.next != _tokens.length) {
+      throw FormatException("Unexpected token: ${_tokens[result.next]}");
+    }
+
+    return result.node;
   }
 
   Decimal evaluate(Node expression, {MathMode mode = MathMode.RADIANS}) {
@@ -35,10 +41,14 @@ class MathEngine {
     while (left.next < _tokens.length) {
       final op = _tokens[left.next];
 
+      if (op == ")") {
+        break;
+      }
+
       if (op == "+" || op == "-") {
         ParseResult right;
 
-        final powerCandidate = _parsePower(left.next + 1);
+        final powerCandidate = _parseUnary(left.next + 1);
 
         if (powerCandidate.next < _tokens.length &&
             _tokens[powerCandidate.next] == "%") {
@@ -70,9 +80,8 @@ class MathEngine {
           ),
           next: right.next,
         );
-      } else {
-        break;
       }
+      break;
     }
 
     return left;
@@ -108,9 +117,8 @@ class MathEngine {
           continue;
         }
         break;
-      } else {
-        break;
       }
+      break;
     }
 
     if (left.next < _tokens.length && _tokens[left.next] == "%") {
@@ -189,18 +197,26 @@ class MathEngine {
       return ParseResult(node: inner.node, next: inner.next + 1);
     }
 
-    return ParseResult(
-      node: LiteralNode(literal: token),
-      next: index + 1,
-    );
+    if (_isLiteral(token)) {
+      return ParseResult(
+        node: LiteralNode(literal: token),
+        next: index + 1,
+      );
+    }
+
+    throw FormatException("Invalid token: $token");
+  }
+
+  bool _isLiteral(String token) {
+    if (token == "pi" || token == "e") {
+      return true;
+    }
+
+    return RegExp(r"^-?\d+(\.\d+)?([eE][+-]?\d+)?$").hasMatch(token);
   }
 
   bool _isFactorStarter(String token) {
-    return token == "(" ||
-        token == "pi" ||
-        token == "e" ||
-        _isUnaryOperator(token) ||
-        RegExp(r"^\d").hasMatch(token);
+    return token == "(" || _isLiteral(token) || _isUnaryOperator(token);
   }
 
   bool _isUnaryOperator(String token) {
@@ -242,7 +258,7 @@ class MathEngine {
       case "sqrt":
         return UnaryNodeType.ROOT;
       default:
-        throw CalculatorException("Unknown token: $token");
+        throw CalculatorException("Unknown unary token: $token");
     }
   }
 }
