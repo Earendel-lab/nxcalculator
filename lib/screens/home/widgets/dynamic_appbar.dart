@@ -4,6 +4,7 @@ import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/screens/settings/settings.dart";
 import "package:nxcalculator/widgets/slide_page_route.dart";
 import "package:nxdesign/fonts.dart";
+import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class DynamicAppbar extends StatelessWidget {
@@ -14,8 +15,6 @@ class DynamicAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Consumer<SettingsRepository>(
       builder: (context, repo, child) {
         return Padding(
@@ -39,9 +38,7 @@ class DynamicAppbar extends StatelessWidget {
               ...?actions,
               IconButton(
                 tooltip: "Settings",
-                icon: isDark
-                    ? Image.asset("assets/icons/dark/settings.png")
-                    : Image.asset("assets/icons/light/settings.png"),
+                icon: const NxIcon(path: NxIcon.settings),
                 padding: const EdgeInsets.all(14),
                 onPressed: () {
                   Navigator.of(

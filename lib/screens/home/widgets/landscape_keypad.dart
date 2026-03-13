@@ -8,6 +8,7 @@ import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxdesign/colors.dart";
 import "package:nxdesign/fonts.dart";
+import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class LandscapeKeypad extends StatefulWidget {
@@ -264,11 +265,9 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
                         textAlign: TextAlign.center,
                       ),
                     )
-                  : SizedBox.square(
+                  : const SizedBox.square(
                       dimension: 28,
-                      child: _isDark
-                          ? Image.asset("assets/icons/dark/backspace.png")
-                          : Image.asset("assets/icons/light/backspace.png"),
+                      child: NxIcon(path: NxIcon.backspace),
                     )
             : Text(
                 buttonKey == "{bracket}" &&

@@ -11,6 +11,7 @@ import "package:nxcalculator/screens/home/widgets/history_listview.dart";
 import "package:nxcalculator/screens/home/widgets/portrait_keypad.dart";
 import "package:nxdesign/colors.dart";
 import "package:nxdesign/fonts.dart";
+import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class PortraitLayout extends StatefulWidget {
@@ -25,8 +26,6 @@ class _PortraitLayoutState extends State<PortraitLayout> {
 
   SettingsRepository get _settings => context.read<SettingsRepository>();
   CalculatorRepository get _calculator => context.read<CalculatorRepository>();
-
-  bool get _isDark => Theme.of(context).brightness == Brightness.dark;
 
   @override
   void initState() {
@@ -47,9 +46,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                     settings.get(swipeUpHistorySetting) == false)
                   IconButton(
                     tooltip: "History",
-                    icon: _isDark
-                        ? Image.asset("assets/icons/dark/history.png")
-                        : Image.asset("assets/icons/light/history.png"),
+                    icon: const NxIcon(path: NxIcon.history),
                     padding: const EdgeInsets.all(14),
                     onPressed: _showHistory,
                   ),
@@ -62,11 +59,10 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                         color: _isExtended ? NxColors.nothingRed : null,
                         shape: BoxShape.circle,
                       ),
-                      child: _isDark
-                          ? Image.asset("assets/icons/dark/function.png")
-                          : _isExtended
-                          ? Image.asset("assets/icons/dark/function.png")
-                          : Image.asset("assets/icons/light/function.png"),
+                      child: NxIcon(
+                        path: NxIcon.function,
+                        color: _isExtended ? NxColors.darkThemeText : null,
+                      ),
                     ),
                     padding: const EdgeInsets.all(10),
                     onPressed: () {
@@ -154,17 +150,12 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                                           : null,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: _isDark
-                                        ? Image.asset(
-                                            "assets/icons/dark/function.png",
-                                          )
-                                        : _isExtended
-                                        ? Image.asset(
-                                            "assets/icons/dark/function.png",
-                                          )
-                                        : Image.asset(
-                                            "assets/icons/light/function.png",
-                                          ),
+                                    child: NxIcon(
+                                      path: NxIcon.function,
+                                      color: _isExtended
+                                          ? NxColors.darkThemeText
+                                          : null,
+                                    ),
                                   ),
                                   padding: const EdgeInsets.all(10),
                                   onPressed: () {
@@ -176,13 +167,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                                     false)
                                   IconButton(
                                     tooltip: "History",
-                                    icon: _isDark
-                                        ? Image.asset(
-                                            "assets/icons/dark/history.png",
-                                          )
-                                        : Image.asset(
-                                            "assets/icons/light/history.png",
-                                          ),
+                                    icon: const NxIcon(path: NxIcon.history),
                                     padding: const EdgeInsets.all(14),
                                     onPressed: _showHistory,
                                   ),

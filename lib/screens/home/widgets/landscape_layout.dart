@@ -11,6 +11,7 @@ import "package:nxcalculator/screens/home/widgets/history_listview.dart";
 import "package:nxcalculator/screens/home/widgets/landscape_keypad.dart";
 import "package:nxcalculator/widgets/slide_page_route.dart";
 import "package:nxdesign/fonts.dart";
+import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class LandscapeLayout extends StatefulWidget {
@@ -25,8 +26,6 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
 
   CalculatorRepository get _calculator => context.read<CalculatorRepository>();
   SettingsRepository get _settings => context.read<SettingsRepository>();
-
-  bool get _isDark => Theme.of(context).brightness == Brightness.dark;
 
   @override
   void initState() {
@@ -48,9 +47,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                     children: [
                       IconButton(
                         tooltip: "Settings",
-                        icon: _isDark
-                            ? Image.asset("assets/icons/dark/settings.png")
-                            : Image.asset("assets/icons/light/settings.png"),
+                        icon: const NxIcon(path: NxIcon.settings),
                         padding: const EdgeInsets.all(14),
                         onPressed: () {
                           Navigator.of(
@@ -60,9 +57,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                       ),
                       IconButton(
                         tooltip: "Toggle Sidebar",
-                        icon: _isDark
-                            ? Image.asset("assets/icons/dark/panel_open.png")
-                            : Image.asset("assets/icons/light/panel_open.png"),
+                        icon: const NxIcon(path: NxIcon.leftPanelOpen),
                         padding: const EdgeInsets.all(14),
                         onPressed: () {
                           setState(() => _collapsed = !_collapsed);
@@ -79,13 +74,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                         actions: [
                           IconButton(
                             tooltip: "Toggle Sidebar",
-                            icon: _isDark
-                                ? Image.asset(
-                                    "assets/icons/dark/panel_close.png",
-                                  )
-                                : Image.asset(
-                                    "assets/icons/light/panel_close.png",
-                                  ),
+                            icon: const NxIcon(path: NxIcon.leftPanelClose),
                             padding: const EdgeInsets.all(14),
                             onPressed: () {
                               setState(() => _collapsed = !_collapsed);

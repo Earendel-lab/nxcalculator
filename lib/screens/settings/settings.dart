@@ -13,8 +13,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Consumer<SettingsRepository>(
       builder: (context, repo, child) {
         final grouped = repo.getGrouped();
@@ -39,9 +37,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   leading: IconButton(
                     tooltip: "Back",
-                    icon: isDark
-                        ? Image.asset("assets/icons/dark/back.png")
-                        : Image.asset("assets/icons/light/back.png"),
+                    icon: const NxIcon(path: NxIcon.back),
                     padding: const EdgeInsets.all(14),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -182,28 +178,22 @@ class SettingsScreen extends StatelessWidget {
     String value, {
     ShapeBorder? shape,
   }) {
-    var iconName = "expand";
+    var icon = NxIcon.down;
 
     return StatefulBuilder(
       builder: (context, setState) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-
         return Material(
           child: ExpansionTile(
             shape: shape,
             collapsedShape: shape,
             initiallyExpanded: false,
             onExpansionChanged: (value) => setState(() {
-              iconName = value ? "contract" : "expand";
+              icon = value ? NxIcon.up : NxIcon.down;
             }),
+            splashColor: Colors.transparent,
             title: Text(setting.name, style: const TextStyle(fontSize: 18)),
             subtitle: Text("Current: $value"),
-            trailing: SizedBox.square(
-              dimension: 32,
-              child: isDark
-                  ? Image.asset("assets/icons/dark/$iconName.png")
-                  : Image.asset("assets/icons/light/$iconName.png"),
-            ),
+            trailing: SizedBox(width: 48, child: NxIcon(path: icon)),
             children:
                 [
                   NxFonts.fontInter,

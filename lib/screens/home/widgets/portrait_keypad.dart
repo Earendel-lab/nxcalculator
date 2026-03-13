@@ -8,6 +8,7 @@ import "package:nxcalculator/repositories/settings.dart";
 import "package:nxcalculator/utils/strings.dart";
 import "package:nxdesign/colors.dart";
 import "package:nxdesign/fonts.dart";
+import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class PortraitKeypad extends StatefulWidget {
@@ -327,9 +328,7 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
                         ),
                         textAlign: TextAlign.center,
                       )
-                    : _isDark
-                    ? Image.asset("assets/icons/dark/backspace.png")
-                    : Image.asset("assets/icons/light/backspace.png"),
+                    : const NxIcon(path: NxIcon.backspace),
               )
             : Text(
                 buttonKey == "{bracket}" &&

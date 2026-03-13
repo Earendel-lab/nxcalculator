@@ -82,7 +82,10 @@ class _HistoryListviewState extends State<HistoryListview> {
           color: NxColors.nothingRed,
           borderRadius: NxMetrics.cardBorderRadius,
         ),
-        child: Image.asset("assets/icons/dark/delete.png"),
+        child: const NxIcon(
+          path: NxIcon.deleteSwipe,
+          color: NxColors.darkThemeText,
+        ),
       ),
       confirmDismiss: () async => true,
       onDismissed: () => widget.onDelete?.call(index),
@@ -179,11 +182,9 @@ class _HistoryListviewState extends State<HistoryListview> {
                   await _calculator.clearHistory();
                 }
               },
-              icon: SizedBox.square(
+              icon: const SizedBox.square(
                 dimension: 24,
-                child: _isDark
-                    ? Image.asset("assets/icons/dark/delete.png")
-                    : Image.asset("assets/icons/light/delete.png"),
+                child: NxIcon(path: NxIcon.delete),
               ),
             ),
         ],

@@ -25,25 +25,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   shared_preferences_platform_interface: ^2.4.1
-
-flutter:
-  assets:
-    - assets/
-    - assets/fonts/
-    - assets/icons/
-    - assets/icons/light/
-    - assets/icons/dark/
-
-  fonts:
-    - family: NType
-      fonts:
-        - asset: assets/fonts/NType82.otf
-    - family: NDot
-      fonts:
-        - asset: assets/fonts/NDot77.otf
-    - family: LetteraMono
-      fonts:
-        - asset: assets/fonts/LetteraMono.otf
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter.otf
