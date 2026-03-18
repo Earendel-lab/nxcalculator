@@ -68,17 +68,17 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
     "{digit_6}": "6",
     "{multiply}": "×",
     "{divide}": "÷",
-    "{sin}": widget.isInverted ? "arcsin(" : "sin(",
-    "{cos}": widget.isInverted ? "arccos(" : "cos(",
-    "{tan}": widget.isInverted ? "arctan(" : "tan(",
+    "{sin}": widget.isInverted ? "sin⁻¹" : "sin",
+    "{cos}": widget.isInverted ? "cos⁻¹" : "cos",
+    "{tan}": widget.isInverted ? "tan⁻¹" : "tan",
     "{digit_1}": "1",
     "{digit_2}": "2",
     "{digit_3}": "3",
     "{add}": "+",
     "{subtract}": "-",
     "{euler}": "e",
-    "{ln}": widget.isInverted ? "eˣ" : "ln(",
-    "{log}": widget.isInverted ? "10ˣ" : "log(",
+    "{ln}": widget.isInverted ? "eˣ" : "ln",
+    "{log}": widget.isInverted ? "10ˣ" : "log",
     "{decimal}": mapDecimalSeparator(_settings.get(decimalSeparatorSetting)),
     "{digit_0}": "0",
     "{percent}": "%",
@@ -146,25 +146,7 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
   }
 
   String? _getButtonFont(String buttonKey) {
-    final font = _settings.get(numpadFontSetting);
-
-    if (buttonKey.contains("digit")) {
-      return font;
-    }
-
-    return switch (buttonKey) {
-      "{divide}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{multiply}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{subtract}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{add}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{equals}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{pi}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{power}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      "{root}" when font == NxFonts.fontNType && !widget.isInverted =>
-        NxFonts.fontLettera,
-      "{factorial}" when font == NxFonts.fontNType => NxFonts.fontLettera,
-      _ => font,
-    };
+    return _settings.get(numpadFontSetting);
   }
 
   Color _getButtonBGColor(String buttonKey) {
@@ -183,12 +165,17 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
   }
 
   ShapeBorder? _getButtonShape(String buttonKey) {
-    return RoundedRectangleBorder(
-      side: buttonKey == "{invert}" && widget.isInverted
-          ? const BorderSide(color: NxColors.nothingRed, width: 2)
-          : BorderSide.none,
-      borderRadius: BorderRadiusGeometry.circular(16),
-    );
+    switch (buttonKey) {
+      case "{invert}" when widget.isInverted:
+        return RoundedRectangleBorder(
+          side: const BorderSide(color: NxColors.nothingRed, width: 2),
+          borderRadius: BorderRadiusGeometry.circular(16),
+        );
+      default:
+        return RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(16),
+        );
+    }
   }
 
   Color? _getButtonFGColor(String buttonKey) {
@@ -207,117 +194,73 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
   }
 
   Widget _getButtonWidget(String buttonKey) {
+    final font = _getButtonFont(buttonKey);
+    final color = _getButtonFGColor(buttonKey);
+
+    final functionsStyle = TextStyle(
+      color: color,
+      fontFamily: font,
+      fontSize: 22,
+    );
+    final functionsStrut = const StrutStyle(
+      forceStrutHeight: true,
+      fontSize: 22,
+    );
+    final numpadStyle = TextStyle(color: color, fontFamily: font, fontSize: 24);
+    final numpadStrut = const StrutStyle(forceStrutHeight: true, fontSize: 24);
+
     switch (buttonKey) {
-      case "{ln}":
-      case "{log}":
       case "{sin}":
       case "{cos}":
       case "{tan}":
+      case "{ln}":
+      case "{log}":
       case "{root}":
-        return _getRichTextWidget(buttonKey);
       case "{invert}":
       case "{mode}":
-        final fontSize = 22.0;
-        return Text(
-          _keypadValues[buttonKey] ?? "",
-          style: TextStyle(
-            color: _getButtonFGColor(buttonKey),
-            fontFamily: _getButtonFont(buttonKey),
-            fontSize: fontSize,
-          ),
-          strutStyle: StrutStyle(forceStrutHeight: true, fontSize: fontSize),
-          textAlign: TextAlign.center,
-        );
       case "{pi}":
       case "{euler}":
       case "{factorial}":
       case "{power}":
-        final fontSize = 22.0;
         return Text(
           _keypadValues[buttonKey] ?? "",
-          style: TextStyle(
-            color: _getButtonFGColor(buttonKey),
-            fontFamily: _getButtonFont(buttonKey),
-            fontSize: fontSize,
+          style: functionsStyle,
+          strutStyle: functionsStrut,
+          textAlign: TextAlign.center,
+        );
+      case "{delete}"
+          when _settings.get(preferIconsToTextSetting) &&
+              font == NxFonts.fontNDot:
+        return Center(
+          child: Text(
+            "<<",
+            style: numpadStyle,
+            strutStyle: numpadStrut,
+            textAlign: TextAlign.center,
           ),
-          strutStyle: StrutStyle(forceStrutHeight: true, fontSize: fontSize),
+        );
+      case "{delete}":
+        return const SizedBox.square(
+          dimension: 28,
+          child: NxIcon(path: NxIcon.backspace),
+        );
+
+      case "{bracket}"
+          when font == NxFonts.fontNType || font == NxFonts.fontInter:
+        return Text(
+          "( )",
+          style: numpadStyle,
+          strutStyle: numpadStrut,
           textAlign: TextAlign.center,
         );
       default:
-        final font = _getButtonFont(buttonKey);
-        final fontSize = 22.0;
-
-        return _settings.get(preferIconsToTextSetting) &&
-                buttonKey == "{delete}"
-            ? font == NxFonts.fontNDot
-                  ? Center(
-                      child: Text(
-                        "<<",
-                        style: TextStyle(
-                          color: _getButtonFGColor(buttonKey),
-                          fontFamily: _getButtonFont(buttonKey),
-                          fontSize: fontSize,
-                        ),
-                        strutStyle: StrutStyle(
-                          fontSize: fontSize,
-                          forceStrutHeight: true,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : const SizedBox.square(
-                      dimension: 28,
-                      child: NxIcon(path: NxIcon.backspace),
-                    )
-            : Text(
-                buttonKey == "{bracket}" &&
-                        (font == NxFonts.fontNType || font == NxFonts.fontInter)
-                    ? "(  )"
-                    : _keypadValues[buttonKey] ?? "",
-                style: TextStyle(
-                  color: _getButtonFGColor(buttonKey),
-                  fontFamily: _getButtonFont(buttonKey),
-                  fontSize: fontSize,
-                ),
-                strutStyle: StrutStyle(
-                  forceStrutHeight: true,
-                  fontSize: fontSize,
-                ),
-                textAlign: TextAlign.center,
-              );
+        return Text(
+          _keypadValues[buttonKey] ?? "",
+          style: numpadStyle,
+          strutStyle: numpadStrut,
+          textAlign: TextAlign.center,
+        );
     }
-  }
-
-  Widget _getRichTextWidget(String buttonKey) {
-    final font = _getButtonFont(buttonKey);
-    final fontSize = 22.0;
-
-    final style = TextStyle(
-      fontSize: fontSize,
-      fontFamily: font,
-      letterSpacing: font == NxFonts.fontLettera ? -4 : 0,
-      color: _isDark ? NxColors.darkThemeText : NxColors.lightThemeText,
-    );
-
-    final text = _keypadValues[buttonKey]
-        ?.replaceAll("arc", "")
-        .replaceAll("(", "");
-
-    final superText = switch (buttonKey) {
-      "{sin}" when widget.isInverted => "⁻¹",
-      "{cos}" when widget.isInverted => "⁻¹",
-      "{tan}" when widget.isInverted => "⁻¹",
-      _ => "",
-    };
-
-    final displayText = "$text$superText";
-
-    return Text(
-      displayText,
-      style: style,
-      strutStyle: StrutStyle(fontSize: style.fontSize, forceStrutHeight: true),
-      textAlign: TextAlign.center,
-    );
   }
 
   void _onButtonPress(String buttonKey) {
@@ -356,8 +299,14 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
       case "{log}":
       case "{ln}":
         widget.onFunctionPress.call(buttonKey);
+      case "{decimal}" when _settings.get(swapDecimalZeroSetting):
+        widget.onDigitPress.call("0");
       case "{decimal}":
         widget.onDecimalPress.call();
+      case "{digit_0}" when _settings.get(swapDecimalZeroSetting):
+        widget.onDecimalPress.call();
+      case "{digit_0}":
+        widget.onDigitPress.call("0");
       default:
         widget.onDigitPress.call(_keypadValues[buttonKey] ?? "");
     }
