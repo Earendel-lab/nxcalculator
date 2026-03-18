@@ -79,8 +79,12 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
     "{euler}": "e",
     "{ln}": widget.isInverted ? "eˣ" : "ln",
     "{log}": widget.isInverted ? "10ˣ" : "log",
-    "{decimal}": mapDecimalSeparator(_settings.get(decimalSeparatorSetting)),
-    "{digit_0}": "0",
+    "{decimal}": _settings.get(swapDecimalZeroSetting)
+        ? "0"
+        : mapDecimalSeparator(_settings.get(decimalSeparatorSetting)),
+    "{digit_0}": _settings.get(swapDecimalZeroSetting)
+        ? mapDecimalSeparator(_settings.get(decimalSeparatorSetting))
+        : "0",
     "{percent}": "%",
     "{bracket}": "()",
     "{equals}": "=",
