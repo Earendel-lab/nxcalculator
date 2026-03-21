@@ -84,7 +84,7 @@ class _EquationInputFieldState extends State<EquationInputField> {
   Widget build(BuildContext context) {
     return Consumer<SettingsRepository>(
       builder: (context, settings, child) {
-        final font = settings.get(equationResultFontSetting);
+        final font = settings.get(equationResultFont);
 
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -166,10 +166,10 @@ class _EquationInputFieldState extends State<EquationInputField> {
                     token = token.trim().replaceAll(" ", "");
 
                     final groupSep = mapGroupingSeparator(
-                      settings.get(groupingSeparatorSetting),
+                      settings.get(groupingSeparator),
                     );
                     final decimalSep = mapDecimalSeparator(
-                      settings.get(decimalSeparatorSetting),
+                      settings.get(decimalSeparator),
                     );
 
                     final split = token.split("E");
@@ -210,7 +210,7 @@ class _EquationInputFieldState extends State<EquationInputField> {
   }
 
   double _findFontSizeThatFits(String text, double maxWidth) {
-    final font = settings.get(equationResultFontSetting);
+    final font = settings.get(equationResultFont);
 
     double measureWidth(String text, double fontSize) {
       final tp = TextPainter(

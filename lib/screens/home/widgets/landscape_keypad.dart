@@ -79,11 +79,11 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
     "{euler}": "e",
     "{ln}": widget.isInverted ? "eˣ" : "ln",
     "{log}": widget.isInverted ? "10ˣ" : "log",
-    "{decimal}": _settings.get(swapDecimalZeroSetting)
+    "{decimal}": _settings.get(swapDecimalZero)
         ? "0"
-        : mapDecimalSeparator(_settings.get(decimalSeparatorSetting)),
-    "{digit_0}": _settings.get(swapDecimalZeroSetting)
-        ? mapDecimalSeparator(_settings.get(decimalSeparatorSetting))
+        : mapDecimalSeparator(_settings.get(decimalSeparator)),
+    "{digit_0}": _settings.get(swapDecimalZero)
+        ? mapDecimalSeparator(_settings.get(decimalSeparator))
         : "0",
     "{percent}": "%",
     "{bracket}": "()",
@@ -150,7 +150,7 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
   }
 
   String? _getButtonFont(String buttonKey) {
-    return _settings.get(numpadFontSetting);
+    return _settings.get(numpadFont);
   }
 
   Color _getButtonBGColor(String buttonKey) {
@@ -233,7 +233,7 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
           textAlign: TextAlign.center,
         );
       case "{delete}"
-          when _settings.get(preferIconsToTextSetting) &&
+          when _settings.get(preferIconsToText) &&
               font == NxFonts.fontNDot:
         return Center(
           child: Text(
@@ -268,7 +268,7 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
   }
 
   void _onButtonPress(String buttonKey) {
-    if (_settings.get(disableHapticSetting) != true) {
+    if (_settings.get(disableHaptics) != true) {
       HapticFeedback.vibrate();
     }
 
@@ -303,11 +303,11 @@ class _LandscapeKeypadState extends State<LandscapeKeypad> {
       case "{log}":
       case "{ln}":
         widget.onFunctionPress.call(buttonKey);
-      case "{decimal}" when _settings.get(swapDecimalZeroSetting):
+      case "{decimal}" when _settings.get(swapDecimalZero):
         widget.onDigitPress.call("0");
       case "{decimal}":
         widget.onDecimalPress.call();
-      case "{digit_0}" when _settings.get(swapDecimalZeroSetting):
+      case "{digit_0}" when _settings.get(swapDecimalZero):
         widget.onDecimalPress.call();
       case "{digit_0}":
         widget.onDigitPress.call("0");

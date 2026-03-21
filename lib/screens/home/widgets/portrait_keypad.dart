@@ -68,11 +68,11 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
     "{digit_2}": "2",
     "{digit_3}": "3",
     "{add}": "+",
-    "{decimal}": _settings.get(swapDecimalZeroSetting)
+    "{decimal}": _settings.get(swapDecimalZero)
         ? "0"
-        : mapDecimalSeparator(_settings.get(decimalSeparatorSetting)),
-    "{digit_0}": _settings.get(swapDecimalZeroSetting)
-        ? mapDecimalSeparator(_settings.get(decimalSeparatorSetting))
+        : mapDecimalSeparator(_settings.get(decimalSeparator)),
+    "{digit_0}": _settings.get(swapDecimalZero)
+        ? mapDecimalSeparator(_settings.get(decimalSeparator))
         : "0",
     "{delete}": "C",
     "{equals}": "=",
@@ -189,12 +189,12 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
   }
 
   double _getButtonSpacing() {
-    final density = _settings.get(numpadDensitySetting);
+    final density = _settings.get(numpadDensity);
     return density == NumpadDensity.dense ? 4 : 8;
   }
 
   String? _getButtonFont(String buttonKey) {
-    return _settings.get(numpadFontSetting);
+    return _settings.get(numpadFont);
   }
 
   Color _getButtonBGColor(String buttonKey) {
@@ -213,7 +213,7 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
   }
 
   ShapeBorder? _getButtonShape(String buttonKey) {
-    final shape = _settings.get(numpadButtonShapeSetting);
+    final shape = _settings.get(numpadButtonShape);
     final selectedBorderSide = buttonKey == "{invert}" && widget.isInverted
         ? const BorderSide(color: NxColors.nothingRed, width: 2)
         : BorderSide.none;
@@ -302,8 +302,7 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
           textAlign: TextAlign.center,
         );
       case "{delete}"
-          when _settings.get(preferIconsToTextSetting) &&
-              font == NxFonts.fontNDot:
+          when _settings.get(preferIconsToText) && font == NxFonts.fontNDot:
         return SizedBox.square(
           dimension: 48,
           child: Text(
@@ -342,7 +341,7 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
   }
 
   void _onButtonPress(String buttonKey) {
-    if (_settings.get(disableHapticSetting) != true) {
+    if (_settings.get(disableHaptics) != true) {
       HapticFeedback.vibrate();
     }
 
@@ -377,11 +376,11 @@ class _PortraitKeypadState extends State<PortraitKeypad> {
       case "{log}":
       case "{ln}":
         widget.onFunctionPress.call(buttonKey);
-      case "{decimal}" when _settings.get(swapDecimalZeroSetting):
+      case "{decimal}" when _settings.get(swapDecimalZero):
         widget.onDigitPress.call("0");
       case "{decimal}":
         widget.onDecimalPress.call();
-      case "{digit_0}" when _settings.get(swapDecimalZeroSetting):
+      case "{digit_0}" when _settings.get(swapDecimalZero):
         widget.onDecimalPress.call();
       case "{digit_0}":
         widget.onDigitPress.call("0");

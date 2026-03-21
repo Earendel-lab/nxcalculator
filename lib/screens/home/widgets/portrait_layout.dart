@@ -30,7 +30,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
   @override
   void initState() {
     super.initState();
-    _isExtended = _settings.get(startExtendedSetting);
+    _isExtended = _settings.get(startExtended);
   }
 
   @override
@@ -42,15 +42,15 @@ class _PortraitLayoutState extends State<PortraitLayout> {
             DynamicAppbar(
               padding: const EdgeInsets.only(left: 24),
               actions: [
-                if (settings.get(preferBottomToolbarSetting) == false &&
-                    settings.get(swipeUpHistorySetting) == false)
+                if (settings.get(preferBottomToolbar) == false &&
+                    settings.get(swipeUpHistory) == false)
                   IconButton(
                     tooltip: "History",
                     icon: const NxIcon(path: NxIcon.history),
                     padding: const EdgeInsets.all(14),
                     onPressed: _showHistory,
                   ),
-                if (settings.get(preferBottomToolbarSetting) == false)
+                if (settings.get(preferBottomToolbar) == false)
                   IconButton(
                     tooltip: "Scientific",
                     icon: Container(
@@ -119,11 +119,9 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                                 ? 38
                                 : 40,
                             color: Colors.grey[600],
-                            fontFamily: _settings.get(
-                              equationResultFontSetting,
-                            ),
+                            fontFamily: _settings.get(equationResultFont),
                             letterSpacing:
-                                _settings.get(equationResultFontSetting) ==
+                                _settings.get(equationResultFont) ==
                                     NxFonts.fontLettera
                                 ? -7
                                 : null,
@@ -133,7 +131,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                     },
                   ),
                   const Spacer(),
-                  settings.get(preferBottomToolbarSetting)
+                  settings.get(preferBottomToolbar)
                       ? SizedBox(
                           height: 56,
                           child: Padding(
@@ -163,8 +161,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                                   },
                                 ),
                                 const SizedBox(width: 16),
-                                if (settings.get(swipeUpHistorySetting) ==
-                                    false)
+                                if (settings.get(swipeUpHistory) == false)
                                   IconButton(
                                     tooltip: "History",
                                     icon: const NxIcon(path: NxIcon.history),
@@ -183,7 +180,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                       builder: (context, repo, child) {
                         return GestureDetector(
                           onVerticalDragEnd: (details) async {
-                            if (_settings.get(swipeUpHistorySetting)) {
+                            if (_settings.get(swipeUpHistory)) {
                               if (details.primaryVelocity != null &&
                                   details.primaryVelocity! < -800) {
                                 await _showHistory();
@@ -252,7 +249,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
                               if (await _calculator.saveHistory(
                                 item,
                                 preventDuplicate: _settings.get(
-                                  preventDuplicateHistorySetting,
+                                  preventDuplicateHistory,
                                 ),
                               )) {
                                 _calculator.clear();
@@ -318,7 +315,7 @@ class _PortraitLayoutState extends State<PortraitLayout> {
 
   EdgeInsets _getNumpadDensity() {
     return EdgeInsets.symmetric(
-      horizontal: switch (_settings.get(numpadDensitySetting)) {
+      horizontal: switch (_settings.get(numpadDensity)) {
         NumpadDensity.comfy => 12,
         NumpadDensity.dense => 32,
         _ => 24,

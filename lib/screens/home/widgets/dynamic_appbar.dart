@@ -8,8 +8,9 @@ import "package:nxdesign/widgets.dart";
 import "package:provider/provider.dart";
 
 class DynamicAppbar extends StatelessWidget {
-  const DynamicAppbar({super.key, this.padding, this.actions});
+  const DynamicAppbar({super.key, this.title, this.padding, this.actions});
 
+  final Widget? title;
   final List<Widget>? actions;
   final EdgeInsetsGeometry? padding;
 
@@ -21,19 +22,21 @@ class DynamicAppbar extends StatelessWidget {
           padding: padding ?? EdgeInsetsGeometry.zero,
           child: AppBar(
             titleSpacing: 0,
-            title: repo.get(hideCalcTextSetting)
-                ? null
-                : const Text(
-                    "Calculator",
-                    style: TextStyle(
-                      fontFamily: NxFonts.fontNType,
-                      fontSize: 36,
-                    ),
-                    strutStyle: StrutStyle(
-                      forceStrutHeight: true,
-                      fontSize: 36,
-                    ),
-                  ),
+            title:
+                title ??
+                (repo.get(hideCalcText)
+                    ? null
+                    : const Text(
+                        "Calculator",
+                        style: TextStyle(
+                          fontFamily: NxFonts.fontNType,
+                          fontSize: 36,
+                        ),
+                        strutStyle: StrutStyle(
+                          forceStrutHeight: true,
+                          fontSize: 36,
+                        ),
+                      )),
             actions: [
               ...?actions,
               IconButton(

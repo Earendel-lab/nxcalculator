@@ -148,9 +148,9 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                           height: 1,
                           fontSize: 38,
                           color: Colors.grey[600],
-                          fontFamily: _settings.get(equationResultFontSetting),
+                          fontFamily: _settings.get(equationResultFont),
                           letterSpacing:
-                              _settings.get(equationResultFontSetting) ==
+                              _settings.get(equationResultFont) ==
                                   NxFonts.fontLettera
                               ? -6
                               : null,
@@ -222,7 +222,7 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                           if (await _calculator.saveHistory(
                             item,
                             preventDuplicate: _settings.get(
-                              preventDuplicateHistorySetting,
+                              preventDuplicateHistory,
                             ),
                           )) {
                             _calculator.clear();

@@ -35,8 +35,8 @@ String getFormattedToken(
 }) {
   final number = Decimal.tryParse(token);
 
-  final groupSep = settings?.get(groupingSeparatorSetting);
-  final decimalSep = settings?.get(decimalSeparatorSetting);
+  final groupSep = settings?.get(groupingSeparator);
+  final decimalSep = settings?.get(decimalSeparator);
 
   if (token == ".") {
     return mapDecimalSeparator(decimalSep);

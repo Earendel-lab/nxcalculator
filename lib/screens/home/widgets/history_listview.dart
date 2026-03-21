@@ -110,7 +110,7 @@ class _HistoryListviewState extends State<HistoryListview> {
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 28,
-                    fontFamily: _settings.get(equationResultFontSetting),
+                    fontFamily: _settings.get(equationResultFont),
                   ),
                   strutStyle: const StrutStyle(
                     forceStrutHeight: true,
@@ -124,7 +124,7 @@ class _HistoryListviewState extends State<HistoryListview> {
                   maxLines: 1,
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                    fontFamily: _settings.get(equationResultFontSetting),
+                    fontFamily: _settings.get(equationResultFont),
                     fontSize: 20,
                     color: _isDark
                         ? NxColors.darkInactive

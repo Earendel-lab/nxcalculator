@@ -42,7 +42,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       final settings = context.read<SettingsRepository>();
-      final keepScreenOn = settings.get(keepScreenAwakeSetting);
+      final keepScreenOn = settings.get(keepScreenAwake);
       if (keepScreenOn) {
         await ScreenTimeoutService.setKeepScreenOn(true);
       }
@@ -53,13 +53,13 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Consumer<SettingsRepository>(
       builder: (context, repo, child) {
-        final themeMode = repo.get(themeModeSetting);
+        final mode = repo.get(themeMode);
 
         return MaterialApp(
           title: "NxCalculator",
           theme: NxTheme.lightTheme,
           darkTheme: NxTheme.darkTheme,
-          themeMode: themeMode,
+          themeMode: mode,
           home: const HomeScreen(),
         );
       },
