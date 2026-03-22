@@ -1,6 +1,7 @@
 import "package:flutter/material.dart" hide Switch, Checkbox;
 import "package:nxcalculator/models/setting.dart";
 import "package:nxcalculator/screens/settings/licenses.dart";
+import "package:nxcalculator/screens/settings/privacy_policy.dart";
 import "package:nxcalculator/services/screen_timeout.dart";
 import "package:nxcalculator/widgets/slide_page_route.dart";
 import "package:nxdesign/fonts.dart";
@@ -26,6 +27,7 @@ final allSettings = <Setting>[
   keepScreenAwake,
   disableHaptics,
   showLicenses,
+  showPrivacyPolicy,
 ];
 
 Future<void> _writeToStorageHelper(
@@ -439,16 +441,44 @@ final showLicenses = Setting<void>(
         return Material(
           child: ListTile(
             shape: shape,
-            onTap: () async {
-              await Navigator.of(
-                context,
-              ).push(SlidePageRoute(page: const LicensesScreen()));
-            },
             title: const Text("Open Source Licenses"),
             trailing: const SizedBox(
               width: 48,
               child: NxIcon(path: NxIcon.right),
             ),
+            onTap: () async {
+              await Navigator.of(
+                context,
+              ).push(SlidePageRoute(page: const LicensesScreen()));
+            },
+          ),
+        );
+      },
+    );
+  },
+);
+
+final showPrivacyPolicy = Setting<void>(
+  key: "privacy_policy",
+  category: Category.extra,
+  read: (prefs) async => {},
+  write: (prefs, value) async {},
+  buildTile: (repo, value, shape) {
+    return Builder(
+      builder: (context) {
+        return Material(
+          child: ListTile(
+            shape: shape,
+            title: const Text("Privacy Policy"),
+            trailing: const SizedBox(
+              width: 48,
+              child: NxIcon(path: NxIcon.right),
+            ),
+            onTap: () async {
+              await Navigator.of(
+                context,
+              ).push(SlidePageRoute(page: const PrivacyPolicyScreen()));
+            },
           ),
         );
       },
