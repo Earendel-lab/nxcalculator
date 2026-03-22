@@ -25,22 +25,7 @@ final allSettings = <Setting>[
   swipeUpHistory,
   keepScreenAwake,
   disableHaptics,
-  themeModeSetting,
-  swapDecimalZeroSetting,
-  hideCalcTextSetting,
-  preferIconsToTextSetting,
-  preferBottomToolbarSetting,
-  numpadButtonShapeSetting,
-  numpadDensitySetting,
-  equationResultFontSetting,
-  numpadFontSetting,
-  groupingSeparatorSetting,
-  decimalSeparatorSetting,
-  preventDuplicateHistorySetting,
-  startExtendedSetting,
-  swipeUpHistorySetting,
-  keepScreenAwakeSetting,
-  disableHapticSetting,
+  showLicenses,
 ];
 
 Future<void> _writeToStorageHelper(
@@ -442,6 +427,34 @@ final Setting<bool> disableHaptics = Setting(
 );
 
 // Extras Settings
+
+final showLicenses = Setting<void>(
+  key: "show_licenses",
+  category: Category.extra,
+  read: (prefs) async => {},
+  write: (prefs, value) async {},
+  buildTile: (repo, value, shape) {
+    return Builder(
+      builder: (context) {
+        return Material(
+          child: ListTile(
+            shape: shape,
+            onTap: () async {
+              await Navigator.of(
+                context,
+              ).push(SlidePageRoute(page: const LicensesScreen()));
+            },
+            title: const Text("Open Source Licenses"),
+            trailing: const SizedBox(
+              width: 48,
+              child: NxIcon(path: NxIcon.right),
+            ),
+          ),
+        );
+      },
+    );
+  },
+);
 
 Widget _buildBooleanTile({
   required String title,
