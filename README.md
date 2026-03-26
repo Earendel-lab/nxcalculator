@@ -18,7 +18,7 @@ Feedback is always welcome!
 - Addition, subtraction, multiplication, division
 - Percentage calculations
 - Clear / All-Clear functions
-  <img width="920" height="680" alt="Calculator Mockup (1)" src="https://github.com/user-attachments/assets/7687dba2-bb09-4415-ad7b-79ecd00ea33d" />
+<img width="920" height="680" alt="Calculator Mockup (1)" src="https://github.com/user-attachments/assets/7687dba2-bb09-4415-ad7b-79ecd00ea33d" />
 
 ---
 ### 🧮Scientific Functions
@@ -30,14 +30,14 @@ Feedback is always welcome!
 - Exponents and powers
 - Root calculations
 - Degree / Radian modes
-  <img width="920" height="680" alt="Calculator Mockup (2)" src="https://github.com/user-attachments/assets/7714dfbb-521e-4301-8963-195471554633" />
+<img width="920" height="680" alt="Calculator Mockup (2)" src="https://github.com/user-attachments/assets/7714dfbb-521e-4301-8963-195471554633" />
 
 ---
 ### 🕥History
 
 - Automatic saving to history
 - Load values directly from history
-  <img width="920" height="680" alt="CAlculator Mockup" src="https://github.com/user-attachments/assets/452a54b4-5a29-4ba2-bf83-7c5f7cada1be" />
+<img width="920" height="680" alt="CAlculator Mockup" src="https://github.com/user-attachments/assets/452a54b4-5a29-4ba2-bf83-7c5f7cada1be" />
 
 ---
 ### 🌈Customization Features
